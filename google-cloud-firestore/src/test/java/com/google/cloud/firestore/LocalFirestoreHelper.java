@@ -116,10 +116,7 @@ public final class LocalFirestoreHelper {
 
   public static final ApiFuture<CommitResponse> FIELD_TRANSFORM_COMMIT_RESPONSE;
 
-  public static final Map<String, Object> SINGLE_POJO;
   public static final Map<String, Object> UPDATED_POJO;
-  public static final FooModel MODEL_OBJECT;
-  public static final FooModel UPDATE_MODEL_OBJECT;
 
   public static final Date DATE;
   public static final Timestamp TIMESTAMP;
@@ -195,31 +192,6 @@ public final class LocalFirestoreHelper {
 
     public void setShortValue(@Nullable Short shortValue) {
       this.shortValue = shortValue;
-    }
-  }
-
-  public static class FooModel {
-    private @Nullable String stringValue;
-
-    @Nullable
-    public String getStringValue() {
-      return stringValue;
-    }
-
-    public void setStringValue(@Nullable String stringValue) {
-      this.stringValue = stringValue;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (o == null || getClass() != o.getClass()) {
-        return false;
-      }
-      FooModel that = (FooModel) o;
-      return ((this.stringValue != null) && this.stringValue.equals(that.stringValue));
     }
   }
 
@@ -693,7 +665,7 @@ public final class LocalFirestoreHelper {
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
     public Map<String, Object> model =
-        ImmutableMap.of("stringValue", (Object) MODEL_OBJECT.getStringValue());
+        ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
 
     @Override
     public boolean equals(Object o) {
@@ -741,8 +713,6 @@ public final class LocalFirestoreHelper {
     SINGLE_FLOAT_MAP = map("float", 0.1F);
     SINGLE_FLOAT_PROTO = map("float", Value.newBuilder().setDoubleValue((Float) 0.1F).build());
 
-    MODEL_OBJECT = new FooModel();
-    MODEL_OBJECT.setStringValue("foo");
     DATABASE_NAME = "projects/test-project/databases/(default)";
     COLLECTION_ID = "coll";
     DOCUMENT_PATH = "coll/doc";
@@ -754,7 +724,7 @@ public final class LocalFirestoreHelper {
     SINGLE_FIELD_MAP = map("foo", (Object) "bar");
     SINGLE_FIELD_OBJECT = new SingleField();
     SINGLE_FIELD_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
-    SINGLE_POJO_PROTO = map("stringValue", Value.newBuilder().setStringValue("foo").build());
+    SINGLE_POJO_PROTO = map("foo", Value.newBuilder().setStringValue("bar").build());
     UPDATED_POJO_PROTO =
         map(
             "model",
@@ -762,12 +732,8 @@ public final class LocalFirestoreHelper {
                 .setMapValue(
                     MapValue.newBuilder()
                         .putFields(
-                            "stringValue", Value.newBuilder().setStringValue("foobar").build()))
+                            "foo", Value.newBuilder().setStringValue("foobar").build()))
                 .build());
-    SINGLE_POJO = map("model", (Object) MODEL_OBJECT);
-    UPDATE_MODEL_OBJECT = new FooModel();
-    UPDATE_MODEL_OBJECT.setStringValue("foobar");
-    UPDATED_POJO = map("model", (Object) UPDATE_MODEL_OBJECT);
     SINGLE_FIELD_SNAPSHOT =
         new DocumentSnapshot(
             null,
@@ -828,8 +794,7 @@ public final class LocalFirestoreHelper {
     ALL_SUPPORTED_TYPES_MAP.put("nullValue", null);
     ALL_SUPPORTED_TYPES_MAP.put("bytesValue", BLOB);
     ALL_SUPPORTED_TYPES_MAP.put("geoPointValue", GEO_POINT);
-    // ALL_SUPPORTED_TYPES_MAP.put("stringValue",fooModel.getStringValue());
-    ALL_SUPPORTED_TYPES_MAP.put("model", map("stringValue", MODEL_OBJECT.getStringValue()));
+    ALL_SUPPORTED_TYPES_MAP.put("model", map("foo", SINGLE_FIELD_OBJECT.foo));
     ALL_SUPPORTED_TYPES_PROTO =
         ImmutableMap.<String, Value>builder()
             .put("foo", Value.newBuilder().setStringValue("bar").build())
@@ -893,6 +858,8 @@ public final class LocalFirestoreHelper {
     CREATE_PRECONDITION = Precondition.newBuilder().setExists(false).build();
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
+    UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);
+
   }
 
   public static String autoId() {

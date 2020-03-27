@@ -16,17 +16,6 @@
 
 package com.google.cloud.firestore.it;
 
-import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_MODEL_OBJECT;
-import static com.google.cloud.firestore.LocalFirestoreHelper.map;
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import com.google.api.core.ApiFuture;
 import com.google.api.core.ApiFutures;
 import com.google.api.core.SettableApiFuture;
@@ -57,6 +46,13 @@ import com.google.cloud.firestore.WriteBatch;
 import com.google.cloud.firestore.WriteResult;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,12 +64,17 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
-import javax.annotation.Nullable;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+
+import static com.google.cloud.firestore.LocalFirestoreHelper.UPDATE_SINGLE_FIELD_OBJECT;
+import static com.google.cloud.firestore.LocalFirestoreHelper.map;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ITSystemTest {
 
@@ -250,8 +251,8 @@ public class ITSystemTest {
     expectedResult.foo = "updated";
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
     expectedResult.model =
-        ImmutableMap.of("stringValue", (Object) UPDATE_MODEL_OBJECT.getStringValue());
-    randomDoc.update("model", UPDATE_MODEL_OBJECT).get();
+        ImmutableMap.of("foo", (Object) UPDATE_SINGLE_FIELD_OBJECT.foo);
+    randomDoc.update("model", UPDATE_SINGLE_FIELD_OBJECT).get();
     documentSnapshot = randomDoc.get().get();
     assertEquals(expectedResult, documentSnapshot.toObject(AllSupportedTypes.class));
   }
