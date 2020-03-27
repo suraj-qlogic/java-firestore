@@ -664,8 +664,7 @@ public final class LocalFirestoreHelper {
     public String nullValue = null;
     public Blob bytesValue = BLOB;
     public GeoPoint geoPointValue = GEO_POINT;
-    public Map<String, Object> model =
-        ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
+    public Map<String, Object> model = ImmutableMap.of("foo", (Object) SINGLE_FIELD_OBJECT.foo);
 
     @Override
     public boolean equals(Object o) {
@@ -731,8 +730,7 @@ public final class LocalFirestoreHelper {
             Value.newBuilder()
                 .setMapValue(
                     MapValue.newBuilder()
-                        .putFields(
-                            "foo", Value.newBuilder().setStringValue("foobar").build()))
+                        .putFields("foo", Value.newBuilder().setStringValue("foobar").build()))
                 .build());
     SINGLE_FIELD_SNAPSHOT =
         new DocumentSnapshot(
@@ -859,7 +857,6 @@ public final class LocalFirestoreHelper {
 
     UPDATE_PRECONDITION = Precondition.newBuilder().setExists(true).build();
     UPDATED_POJO = map("model", (Object) UPDATE_SINGLE_FIELD_OBJECT);
-
   }
 
   public static String autoId() {
