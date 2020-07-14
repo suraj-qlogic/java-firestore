@@ -83,6 +83,16 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
     return empty().append(field);
   }
 
+  /**
+   * Returns a new path pointing to a child of this Path.
+   *
+   * @param path A relative path
+   */
+  @Override
+  FieldPath append(String path) {
+    return super.append(path);
+  }
+
   /** Returns an empty field path. */
   static FieldPath empty() {
     // NOTE: This is not static since it would create a circular class dependency during
@@ -104,7 +114,7 @@ public abstract class FieldPath extends BasePath<FieldPath> implements Comparabl
   String[] splitChildPath(String path) {
     // By default, split() doesn't return empty leading and trailing segments. This can be enabled
     // by passing "-1" as the  limit.
-    return path.split("\\.", -1);
+    return (getSegments().size() == 0) ? path.split("\\.", -1) : new String[] {path};
   }
 
   /**
